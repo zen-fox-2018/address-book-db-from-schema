@@ -33,6 +33,8 @@ switch (command) {
     case 'delete':
         if (argv[1] === 'contact') {
             ContactController.delete(argv[2])
+        } else if (argv[1] === 'group') {
+            GroupController.delete(argv[2])
         }
         break;
 

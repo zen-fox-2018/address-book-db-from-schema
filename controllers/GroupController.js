@@ -25,44 +25,44 @@ class GroupController {
     }
 
     static update(arr) {
-        let email = arr[0]
+        let name = arr[0]
         arr = arr.slice(1)
         let obj = {}
         for (let i = 0; i < arr.length; i+=2) {
             obj[arr[i]] = arr[i+1]
         }
-        Contact.update(email, obj, (err, data) => {
+        Group.update(name, obj, (err, data) => {
             if (err) {
                 View.disErr(err)
             } else {
-                data.changes === 0? View.disErr({msg: 'wrong email'}): View.disUpdate()
+                data.changes === 0? View.disErr({msg: 'wrong group name'}): View.disUpdate()
             }
         })
     }
     
-    static delete(email) {
+    static delete(name) {
         let find = {
-            email: email
+            name: name
         }
-        Contact.findOne(find, (err, contact) => {
+        Group.findOne(find, (err, group) => {
             if (err) {
                 View.disErr(err)
             } else {
-                if (!contact) {
-                    View.disErr({msg: 'wrong email'})
+                if (!group) {
+                    View.disErr({msg: 'wrong group name'})
                 } else {
                     let obj = {
-                        ContactId: contact.id
+                        GroupId: group.id
                     }
                     ContactGroup.delete(obj, (err) => {
                         if (err) {
                             View.disErr(err)
                         } else {
                             obj = {
-                                id: contact.id
+                                id: group.id
                             }
-                            Contact.delete(obj, (err) => {
-                                err? View.disErr(err): View.disDelete('contact')
+                            Group.delete(obj, (err) => {
+                                err? View.disErr(err): View.disDelete('group')
                             })
                         }
                     })
