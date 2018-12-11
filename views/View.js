@@ -16,8 +16,8 @@ class View {
     ===================== AVAILABLE COMMAND ===================
     node main.js <contact/ group /contactgroup> add <input>
     node main.js <contact/ group /contactgroup> update <email> <field> <value>
-    node main.js 
-    node main.js 
+    node main.js <contact/ group /contactgroup> delete
+    node main.js <contact/ group /contactgroup> show
     node main.js 
     ===========================================================
     `)
