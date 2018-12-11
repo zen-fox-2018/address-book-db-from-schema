@@ -1,6 +1,6 @@
 const Contact = require(`../Models/Contact`)
 const Group = require(`../Models/Group`)
-const ContactGroups = 
+const ContactGroups = require(`../Models/ContactGroups`)
 const View = require(`../Views/View`)
 
 class ControllerContact {
@@ -26,10 +26,10 @@ class ControllerContact {
                     data.delete(`telephone_number`, telephone_number, function (err, data) {
                         err ?
                             View.errorDeleteContact(`something went wrong, err: ${err}`) :
-                            View.successDeleteContact(`success delete contact with telephone number: ${telephone_number}`)                                
-                    }) : 
+                            View.successDeleteContact(`success delete contact with telephone number: ${telephone_number}`)
+                    }) :
                     View.errorDeleteContact(`cant delete, contact not found!`)
-                
+
         })
     }
 
@@ -38,29 +38,41 @@ class ControllerContact {
             err ?
                 View.errorUpdateContact(`something went wrong, err ${err}`) :
                 dataFind.telephone_number == telephone_number ?
-                dataFind.update(telephone_number, whereCase, newStatus, function (err, data) {
-                    err ?
-                        View.errorUpdateContact(`something wen wrong when update, err: ${err}`) :
-                        View.successUpdateContact(`success update contact ${dataFind.name}`)
+                    dataFind.update(telephone_number, whereCase, newStatus, function (err, data) {
+                        err ?
+                            View.errorUpdateContact(`something wen wrong when update, err: ${err}`) :
+                            View.successUpdateContact(`success update contact ${dataFind.name}`)
                     }) :
                     View.errorUpdateContact(`${whereCase} wrong, cant update`)
-                
+
         })
     }
 
     static checkContactAndGroup(contactName, groupName) {
-        Contact.findOne(`name`, contactName, function (err, data) {
+        Contact.findOne(`name`, contactName, function (err, contactData) {
             err ?
                 View.errorAddContactToGroup(`something went wrong, err: ${err}`) :
-                data.name != contactName ?
+                contactData.name != contactName ?
                     View.errorAddContactToGroup(`${contactName} tidak ada di kontak`) :
-                    Group.findOne(`name`, groupName, function (err, data) {
+                    Group.findOne(`name`, groupName, function (err, groupData) {
                         err ?
                             View.errorAddContactToGroup(`something went wrong, err: ${err}`) :
-                            data.name != groupName ?
+                            groupData.name != groupName ?
                                 View.errorAddContactToGroup(`grup ${groupName} tidak ada di daftar group`) :
-                                assignGroup(contactName, groupName)
+                                ContactGroups.create(contactData.id, groupData.id, function (err, data) {
+                                    err ?
+                                        View.errorAddContactToGroup(`something went wrong, err: ${err}`) :
+                                        View.successAddContactToGroup(`success add contact to group`)
+                                })
                     })
+        })
+    }
+
+    static showContact() {
+        Contact.findAll(function (err, data) {
+            err ?
+                View.errorShowContact(err) :
+                View.successShowContact(data)
         })
     }
 

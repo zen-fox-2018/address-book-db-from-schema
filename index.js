@@ -28,6 +28,10 @@ switch (command) {
                 ControllerContact.checkContactAndGroup(data[0], data[1])
                 break;
             
+            case `showContact`:
+                ControllerContact.showContact()
+                break;
+            
             default:
                 break;
         }

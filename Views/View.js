@@ -69,6 +69,16 @@ class View {
         
     }
 
+    static successShowContact(data) {
+        console.log(data);
+        
+    }
+
+    static errorShowContact(data) {
+        console.log(data);
+        
+    }
+
 }
 
 module.exports = View
