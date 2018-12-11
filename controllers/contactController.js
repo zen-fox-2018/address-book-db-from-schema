@@ -7,14 +7,23 @@ class Controller {
     }
 
     static register(input) {
-        let contact = new Contact(null, input.name, input.company, input.phone, input.email)
-        contact.create(function(err) {
-            if(err) {
-                View.displayError('Err :', err)
-            } else {
-                View.displaySuccess(`Success Create ${input.name} as New Contact`)
-            }
-        })
+        if((input.phone.length < 10 || input.phone.length > 12) && !Contact.ValidateEmail(input.email)) {
+            View.alert('Phone Number is Incorret')
+            View.alert('Email Invalid')
+        } else if(input.phone.length < 10 || input.phone.length > 12) {
+            View.alert('Phone Number is Incorret')
+        } else if(!Contact.ValidateEmail(input.email)) {
+            View.alert('Email Invalid')
+        } else {
+            let contact = new Contact(null, input.name, input.company, input.phone, input.email)
+            contact.create(function(err) {
+                if(err) {
+                    View.displayError('Err :', err)
+                } else {
+                    View.displaySuccess(`Success Create ${input.name} as New Contact`)
+                }
+            })
+        }
     }
 
     static update(input) {
@@ -54,6 +63,16 @@ class Controller {
                         }
                     })
                 }
+            }
+        })
+    }
+
+    static showAll() {
+        Contact.findAll(function(err, data) {
+            if(err) {
+                View.displayError('Err : ', err)
+            } else {
+                View.displaySuccess(data)
             }
         })
     }

@@ -24,6 +24,8 @@ switch (argv[0]) {
             ContactController.update(input)
         } else if (argv[1] === 'delete') {
             ContactController.delete(argv[2])
+        } else if (argv[1] === 'showContact') {
+            ContactController.showAll()
         }
     break;
 
@@ -65,10 +67,6 @@ switch (argv[0]) {
             }
             ContactGroupController.delete(input)
         }
-    break;
-
-    case 'showContact' :
-        ContactGroupController.
     break;
 
     default:

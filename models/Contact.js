@@ -1,12 +1,13 @@
 const db = require('../db')
 
 class Contact {
-    constructor(id, name, company, phone, email) {
-        this.id = id || 1
+    constructor(id, name, company, phone, email, group) {
+        this.id = id
         this.name = name
         this.company = company
         this.phone = phone
         this.email = email
+        this.group = group
     }
 
     static findOne(field, value, cb) {
@@ -24,20 +25,22 @@ class Contact {
 
     static findAll(cb) {
         let query = 
-        `
-        SELECT 
-	        Contacts.name, 
-	        Contacts.company, 
-	        Contacts.phone, 
-	        Contacts.email, 
-	        group_concat (distinct groups.group_name) as groupList
-        FROM ContactGroups
-        JOIN Contacts
-            ON ContactGroups.contactId = Contacts.id
-        JOIN Groups
-        ON ContactGroups.groupId = Groups.id
-        GROUP BY name
-        `
+            `
+            SELECT 
+                Contacts.id,
+                Contacts.name, 
+                Contacts.company, 
+                Contacts.phone, 
+                Contacts.email, 
+                group_concat (distinct groups.group_name) as groupList
+            FROM ContactGroups
+            JOIN Contacts
+                ON ContactGroups.contactId = Contacts.id
+            JOIN Groups
+            ON ContactGroups.groupId = Groups.id
+            GROUP BY name
+            ORDER BY Contacts.id ASC
+            `
 
         db.all(query, function(err, data) {
             if(err) {
@@ -45,7 +48,7 @@ class Contact {
             } else {
                 let dataAll = []
                 for(let i = 0; i < data.length; i++) {
-                    let contact = new Contact(data[i].id, data[i].name, data[i].company, data[i].phone, data[i].email)
+                    let contact = new Contact(data[i].id, data[i].name, data[i].company, data[i].phone, data[i].email, data[i].groupList)
                     dataAll.push(contact)
                 }
                 cb(null, dataAll)
@@ -90,6 +93,13 @@ class Contact {
                 cb(null)
             }
         })
+    }
+
+    static ValidateEmail(mail) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+            return true
+        }
+        return false
     }
 }
 
