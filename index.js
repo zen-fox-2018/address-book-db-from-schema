@@ -27,11 +27,11 @@ switch (command) {
                 //contact addContactToGroup taqi lamtur
                 ControllerContact.checkContactAndGroup(data[0], data[1])
                 break;
-            
+
             case `showContact`:
                 ControllerContact.showContact()
                 break;
-            
+
             default:
                 break;
         }
@@ -51,6 +51,10 @@ switch (command) {
 
             case `update`:
                 ControllerGroup.update(data[0], data[1], data[2])
+                break;
+
+            case `showGroup`:
+                ControllerGroup.showGroup()
                 break;
 
         }

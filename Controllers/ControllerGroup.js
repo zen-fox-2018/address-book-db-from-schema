@@ -1,7 +1,12 @@
 const Group = require(`../Models/Group`)
 const View = require(`../Views/View`)
+const db = require(`../db`)
 
 class ControllerGroup {
+    constructor(input) {
+        this.id = input ? input.id : null
+        this.name = input ? input.id : null
+    }
     static create(name) {
         Group.findOne(`name`, name, function (err, data) {
             err ?
@@ -43,6 +48,14 @@ class ControllerGroup {
                             View.successUpdateGroup(`success update ${groupName} ${whereCase} to ${newStatus}`)
                     })
                 
+        })
+    }
+
+    static showGroup() {
+        Group.findAll(function (err, data) {
+            err ? 
+                View.errorShowGroup(`something went wrong, err: ${err}`) :
+                View.successShowGroup(data)
         })
     }
 }

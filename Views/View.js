@@ -79,6 +79,16 @@ class View {
         
     }
 
+    static successShowGroup(data) {
+        console.log(data);
+        
+    }
+
+    static errorShowGroup(data) {
+        console.log(data);
+        
+    }
+
 }
 
 module.exports = View

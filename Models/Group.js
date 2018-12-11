@@ -5,8 +5,20 @@ class Group {
         this.id = input ? input.id : null
         this.name = input ? input.name : null
     }
-    static findAll() {
+    static findAll(cb) {
+        let qFindAll = `SELECT * FROM Groups`
+        db.all(qFindAll, function (err, rows) {
 
+            for (let i = 0; i < rows.length; i++) {
+                rows[i] = new Group({
+                    id: rows[i].id,
+                    name: rows[i].name
+                })
+            }
+            err ?
+                cb(err, null) :
+                cb(null, rows)
+        })
     }
 
     static findOne(whereCase, whereStatus, cb) {
