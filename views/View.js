@@ -14,8 +14,8 @@ class View {
   static help() {
     console.log(`
     ===================== AVAILABLE COMMAND ===================
-    node main.js <contact/ group /contactgroup> create <input>
-    node main.js 
+    node main.js <contact/ group /contactgroup> add <input>
+    node main.js <contact/ group /contactgroup> update <email> <field> <value>
     node main.js 
     node main.js 
     node main.js 
