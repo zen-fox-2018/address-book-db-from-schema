@@ -89,11 +89,11 @@ class ContactGroup {
     })
   }
 
-  update(obj, cb) {
+  static update(obj, cb) {
     let query = `
       UPDATE contactgroups SET ${obj.set} = ? WHERE ${obj.where} = ?
     `
-    ContactGroup.runQue(query, [obj.setVal, this[obj.where]] , (err, data) => {
+    ContactGroup.runQue(query, [obj.setVal, obj.whereVal] , (err, data) => {
       if(err) {
         cb(err)
       } else {

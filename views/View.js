@@ -18,7 +18,7 @@ class View {
     node main.js <contact/ group /contactgroup> update <email> <field> <value>
     node main.js <contact/ group /contactgroup> delete
     node main.js <contact/ group /contactgroup> show
-    node main.js 
+    node main.js <group> invite <contact_email>
     ===========================================================
     `)
   }

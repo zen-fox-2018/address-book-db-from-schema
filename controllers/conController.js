@@ -89,14 +89,27 @@ class ContactController {
       if(err){
         View.disErr(err)
       } else {
-
-        row.delete(obj, (err, data) => {
-          if(err) {
-            View.disErr(err)
-          } else {
-            View.display(`delete data:`, row)
-          }
-        })
+        if(row) {
+          ContactGroup.update({set: 'contactId', where: 'contactId', setVal: null, whereVal: row.id}, (err,data)=> {
+            if(err) {
+              View.disErr(err)
+            } else {
+              if(data.changes == 0) {
+                View.disErr(`Nothing change`)
+              } else {
+                row.delete(obj, (err, data) => {
+                  if(err) {
+                    View.disErr(err)
+                  } else {
+                    View.display(`delete data:`, row.name)
+                  }
+                })
+              }
+            }
+          })
+        } else {
+          View.disErr(`Contact not found!`)
+        }
       }
     })
   }

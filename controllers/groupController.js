@@ -1,5 +1,6 @@
 const Group = require('../models/Group') 
 const View = require('../views/View')
+const ContactGroup = require('../models/ContactGroup') 
 
 class GroupController {
   static execute(input) {
@@ -76,13 +77,27 @@ class GroupController {
       if(err){
         View.disErr(err)
       } else {
-        row.delete(obj, (err, data) => {
-          if(err) {
-            View.disErr(err)
-          } else {
-            View.display(`delete data:`, row)
-          }
-        })
+        if(row) {
+          ContactGroup.update({set: 'groupId', where: 'groupId', setVal: null, whereVal: row.id}, (err, data) => {
+            if(err) {
+              View.disErr(err)
+            } else {
+              if(data.changes == 0) {
+                View.disErr(`Nothing changes`)
+              } else {
+                row.delete(obj, (err, data) => {
+                  if(err) {
+                    View.disErr(err)
+                  } else {
+                    View.display(`delete data:`, row)
+                  }
+                })
+              }
+            }
+          })
+        } else {
+          View.disErr(`Group not found`)
+        }
       }
     })
   }
