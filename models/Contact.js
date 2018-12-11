@@ -6,6 +6,7 @@ class Contact {
     this.company = input.company
     this.phone = input.phone
     this.email = input.email
+    this.groups = input.groupsName || 'none'
   }
 
   static runQue(query,value, cb) {
@@ -34,7 +35,10 @@ class Contact {
 
   static findOne(obj, cb) {
     let query = `
-      SELECT * FROM contacts WHERE ${obj.where} = ?
+      SELECT * FROM (SELECT contacts.id,contacts.name, company, phone, email, group_concat(groups.name) As groupsName FROM contacts 
+      left Join contactgroups on contacts.id = contactgroups.contactId 
+      left join groups on contactgroups.groupId = groups.id
+      group by contacts.name) WHERE ${obj.where} = ?
     `
     db.get(query, [obj.value] , (err, row) => {
       if(err) {

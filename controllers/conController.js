@@ -1,5 +1,7 @@
 const Contact = require('../models/Contact')
 const View = require('../views/View')
+const ContactGroup = require('../models/ContactGroup')
+
 class ContactController {
   static execute(input) {
     let command = input[0]
@@ -13,6 +15,8 @@ class ContactController {
       case 'show': ContactController.show()
         break;
       case 'delete': ContactController.delete(option)
+        break;
+      case 'find': ContactController.find(option)
         break;
       default: View.disErr(`no such command!`)
         break;
@@ -98,6 +102,20 @@ class ContactController {
         View.disErr(err)
       } else {
         View.display(`showing data\n`, rows)
+      }
+    })
+  }
+
+  static find(input) {
+    Contact.findOne({where: input[0],value: input[1]}, (err, row) => {
+      if(err) {
+        View.disErr(err)
+      } else {
+        if(row) {
+          View.display(`finding one data`, row)
+        } else {
+          View.disErr(`data not found`)
+        }
       }
     })
   }
