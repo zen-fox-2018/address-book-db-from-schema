@@ -10,10 +10,10 @@ class Contacts {
         this.email = email;
     }
 
-    static finOne(field, value, callback) {
+    static findOne(field, value, callback) {
         // console.log(field, "===========", value)
         let oneContacts = `SELECT * FROM Contacts
-                         WHERE ${field} = "${value}"`
+                           WHERE ${field} = ${value}`
         db.get(oneContacts, function(err, rows) {
             if(err) {
                 callback(err, null)
@@ -29,7 +29,11 @@ class Contacts {
     }
 
     static findAll(callback) {
-        let selectAll = `SELECT * FROM Contacts`
+        let selectAll = `SELECT Contacts.id, Contacts.name, Groups.group_name AS groups 
+                         FROM Contacts JOIN groups_contacts ON Contacts.id = groups_contacts.contactsId 
+                         JOIN Groups on groups_contacts.groupsId = Groups.id
+                         GROUP BY name
+                         ORDER BY Groups.id ASC`
         db.all(selectAll, function(err, arr) {
             if(err) {
                 callback(err)
@@ -44,9 +48,9 @@ class Contacts {
         })
     }
 
-    static create(input, callback) {
+    create(callback) {
         let addNewPerson = `INSERT INTO Contacts(name, company, phone_number, email)
-                            VALUES(${input.name}, ${input.company}, ${input.phone_number}, ${input.email});`
+                            VALUES(${this.name}, ${this.company}, ${this.phone_number}, ${this.email});`
         db.run(addNewPerson, function(err) {
             if(err) {
                 callback(err)
@@ -56,7 +60,7 @@ class Contacts {
         })
     }
 
-    static update(column, value, id, callback) {
+    update(column, value, id, callback) {
         let query = `UPDATE Contacts
                      SET ${column} = "${value}"
                      WHERE id = ${id};`
@@ -69,8 +73,16 @@ class Contacts {
         })
     }
 
-    static delete() {
-
+    static delete(id, callback) {
+        let deleteUser = `DELETE FROM Employees
+                          WHERE id = ${id}`
+        db.run(deleteUser, function(err, deleted) {
+            if(err) {
+                callback(err, null)
+            } else {
+                callback(null, deleted)
+            }
+        })
     }
 
 }

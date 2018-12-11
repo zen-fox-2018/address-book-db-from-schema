@@ -14,7 +14,7 @@ switch (command) {
         break;
     case "update":
         if(args[1] === "contacts") {
-            Contacts.update()
+            Contacts.update(args[2])
         } else if (args[1] === "groups") {
             Groups.update()
         }

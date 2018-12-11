@@ -16,6 +16,10 @@ class Views {
     static showUpdated (data) {
         console.log(data)
     }
+
+    static showDeleted(data) {
+        console.log(data)
+    }
 }
 
 module.exports = Views

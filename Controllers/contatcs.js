@@ -5,7 +5,7 @@ const Views = require("../Views/view")
 class ContactsController {
 
     static create(name, company, phone_number, email) {
-        Contacts.finOne("email", email, function(err, data) {
+        Contacts.findOne("email", email, function(err, data) {
             if(err) {
                 Views.showError(err)
             } else {
@@ -13,7 +13,7 @@ class ContactsController {
                     Views.showError("Sorry this email has been taken!")
                 } else {
                     let newContact = new Contacts(name, company, phone_number, email)
-                    Contacts.create(newContact, function(err) {
+                    newContact.create(newContact, function(err) {
                         if(err) {
                             Views.showError(err)
                         } else {
@@ -36,18 +36,30 @@ class ContactsController {
     }
 
     static update(column, value, id) {
-        Contacts.update(column, value, id, function(err) {
+        Contacts.findOne("id", id, function(err, updatedData) {
             if(err) {
                 Views.showError(err)
             } else {
-                Views.showUpdated("You have successfully updated this person!")
+                updatedData.update(column, value, id, function(err) {
+                    if(err) {
+                        Views.showError(err)
+                    } else {
+                        Views.showUpdated("you have successfully updated this person!")
+                    }
+                })
             }
         })
 
     }
 
-    static delete() {
-        
+    static delete(id) {
+        Contacts.delete(id, function(err, deletedData) {
+            if(err) {
+                Views.showError(err)
+            } else {
+                Views.showDeleted(deletedData)
+            }
+        })
     }
 }
 
