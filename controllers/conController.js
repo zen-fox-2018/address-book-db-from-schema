@@ -33,7 +33,11 @@ class ContactController {
     let newContact = new Contact(obj)
     newContact.save((err, data) => {
       if(err) {
-        View.disErr(err)
+        if(err.code == 'SQLITE_CONSTRAINT') {
+          View.disErr(`phone and email must be unique!`)
+        } else {
+          View.disErr(err.failed)
+        }
       } else {
         Contact.findOne({where: 'id', value: data.lastID}, (err, contact) => {
           if(err) {
@@ -85,6 +89,7 @@ class ContactController {
       if(err){
         View.disErr(err)
       } else {
+
         row.delete(obj, (err, data) => {
           if(err) {
             View.disErr(err)

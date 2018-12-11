@@ -38,7 +38,9 @@ class Contact {
       SELECT * FROM (SELECT contacts.id,contacts.name, company, phone, email, group_concat(groups.name) As groupsName FROM contacts 
       left Join contactgroups on contacts.id = contactgroups.contactId 
       left join groups on contactgroups.groupId = groups.id
-      group by contacts.name) WHERE ${obj.where} = ?
+      group by contacts.name
+      order by contacts.id
+      ) WHERE ${obj.where} = ?
     `
     db.get(query, [obj.value] , (err, row) => {
       if(err) {
@@ -57,9 +59,10 @@ class Contact {
   static findAll(cb) {
     let query = `
     SELECT contacts.id,contacts.name, company, phone, email, group_concat(groups.name) As groupsName FROM contacts 
-    Join contactgroups on contacts.id = contactgroups.contactId 
-    join groups on contactgroups.groupId = groups.id
-    group by contacts.name`
+    left Join contactgroups on contacts.id = contactgroups.contactId 
+    left join groups on contactgroups.groupId = groups.id
+    group by contacts.name 
+    order by contacts.id`
 
     db.all(query, (err, rows) => {
       if(err) {

@@ -4,6 +4,7 @@ class Group {
   constructor(input) {
     this.id = input.id
     this.name = input.name
+    this.member = input.member
   }
 
   static runQue(query, value, cb) {
@@ -32,7 +33,11 @@ class Group {
 
   static findOne(obj, cb) {
     let query = `
-      SELECT * FROM groups WHERE ${obj.where} = ?
+      SELECT * FROM ( SELECT groups.id, groups.name , group_concat(contacts.name) as member FROM groups
+      left Join contactgroups on groups.id = contactgroups.groupId
+      left join contacts on contactgroups.contactId = contacts.id
+      group by groups.name
+      order by groups.id) WHERE ${obj.where} = ?
     `
     db.get(query, [obj.value] , (err, row) => {
       if(err) {
@@ -50,7 +55,11 @@ class Group {
   
   static findAll(cb) {
     let query = `
-    SELECT * FROM groups`
+    SELECT groups.id, groups.name , group_concat(contacts.name) as member FROM groups
+    left Join contactgroups on groups.id = contactgroups.groupId
+    left join contacts on contactgroups.contactId = contacts.id
+    group by groups.name
+    order by groups.id`
 
     db.all(query, (err, rows) => {
       if(err) {
