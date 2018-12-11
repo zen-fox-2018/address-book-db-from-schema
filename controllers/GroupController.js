@@ -16,8 +16,8 @@ class GroupController {
                 if (data) {
                     View.disErr({msg: 'nama group sudah terdaftar'})
                 } else {
-                    Contact.create(obj, (err) => {
-                        err? View.disErr(err): View.disCreate('Contact')
+                    Group.create(obj, (err) => {
+                        err? View.disErr(err): View.disCreate('Group')
                     })
                 }
             }

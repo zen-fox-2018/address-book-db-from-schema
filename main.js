@@ -1,5 +1,6 @@
 const argv = process.argv.slice(2)
 const ContactController = require('./controllers/ContactController')
+const GroupController = require('./controllers/GroupController')
 
 const command = argv[0]
 // name company phone email
@@ -17,13 +18,15 @@ switch (command) {
             obj = {
                 name: argv[2],
             }
-            ContactController.create(obj)
+            GroupController.create(obj)
         }
         break;
 
     case 'update':
         if (argv[1] === 'contact') {
             ContactController.update(argv.slice(2))
+        } else if (argv[1] === 'group') {
+            GroupController.update(argv.slice(2))
         }
         break;
 

@@ -14,6 +14,16 @@ class Group {
         })
     }
 
+    static create(obj, cb) {
+        let input = Object.values(obj)
+        let query = `
+        INSERT INTO Groups
+        VALUES (null, ?)`
+        db.run(query, input, (err) => {
+            err? cb({msg: 'err insert group', err: err}): cb(null)
+        })
+    }
+
 }
 
 module.exports = Group
