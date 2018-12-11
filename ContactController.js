@@ -154,6 +154,17 @@ class ContactController {
       }
     })
   }
+
+  static showContacts() {
+    Contact.show(function(err, data) {
+      if (err) {
+        View.error(err)
+      }
+      else {
+        View.success(data)
+      }
+    })
+  }
 }
 
 module.exports = ContactController

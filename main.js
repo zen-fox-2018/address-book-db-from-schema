@@ -53,6 +53,14 @@ switch (command) {
     ContactGroupController.create(options)
     break;
 
+  case "showContacts":
+    ContactController.showContacts()
+    break;
+
+  case "showGroups":
+    GroupController.showGroups()
+    break;
+
   default: console.log(`Silahkan baca panduan untuk menggunakan sistem ini`);
 
 }

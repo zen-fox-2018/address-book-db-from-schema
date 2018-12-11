@@ -101,6 +101,25 @@ class Group {
       }
     })
   }
+
+  static show(cb) {
+    let query =
+    `
+      SELECT Groups.name, group_concat(Contacts.email) AS members FROM Groups
+      LEFT JOIN ContactGroups ON Groups.id = ContactGroups.groupId
+      LEFT JOIN Contacts ON ContactGroups.contactId = Contacts.id
+      GROUP BY Groups.name ORDER BY Groups.id
+
+    `
+    db.all(query, function(err, data) {
+      if (err) {
+        cb(err)
+      }
+      else {
+        cb(null, data)
+      }
+    })
+  }
 }
 
 module.exports = Group

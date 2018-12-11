@@ -107,6 +107,24 @@ class Contact {
       }
     })
   }
+
+  static show(cb) {
+    let query =
+    `
+    SELECT Contacts.id, Contacts.name, Contacts.company, Contacts.email, group_concat(Groups.name) AS Groups FROM Contacts
+    LEFT JOIN ContactGroups ON Contacts.id = ContactGroups.contactId
+    LEFT JOIN Groups ON ContactGroups.groupId = Groups.id GROUP BY Contacts.name ORDER BY Contacts.id
+
+    `
+    db.all(query, function(err, data) {
+      if (err) {
+        cb(err)
+      }
+      else {
+        cb(null, data)
+      }
+    })
+  }
 }
 
 module.exports = Contact

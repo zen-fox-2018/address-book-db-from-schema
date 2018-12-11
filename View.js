@@ -4,6 +4,10 @@ class View {
     console.log(err);
   }
 
+  static success(data) {
+    console.log(data);
+  }
+
   static message(msg) {
     console.log(`Message:`);
     console.log(msg);

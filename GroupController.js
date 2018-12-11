@@ -129,6 +129,17 @@ class GroupController {
       }
     })
   }
+
+  static showGroups() {
+    Group.show(function(err, data) {
+      if (err) {
+        View.error(err)
+      }
+      else {
+        View.success(data)
+      }
+    })
+  }
 }
 
 module.exports = GroupController
