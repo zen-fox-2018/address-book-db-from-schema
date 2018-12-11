@@ -11,7 +11,6 @@ class Contacts {
     }
 
     static findOne(field, value, callback) {
-        // console.log(field, "===========", value)
         let oneContacts = `SELECT * FROM Contacts
                            WHERE ${field} = ${value}`
         db.get(oneContacts, function(err, rows) {

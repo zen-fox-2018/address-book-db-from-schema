@@ -20,6 +20,10 @@ class Views {
     static showDeleted(data) {
         console.log(data)
     }
+
+    static showCreatedGroups(data) {
+        console.log(data)
+    }
 }
 
 module.exports = Views

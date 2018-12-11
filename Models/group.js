@@ -7,7 +7,7 @@ class Groups {
         this.group_name = group_name;
     }
 
-    static finOne(field, value, callback) {
+    static findOne(field, value, callback) {
         let oneGroups = `SELECT * FROM Groups
                          WHERE ${field} = ${value}`
         db.get(oneGroups, function(err, rows) {
@@ -41,8 +41,32 @@ class Groups {
         })
     }
 
-    create() {
-        
+    create(callback) {
+        let addNewPerson = `INSERT INTO Groups(name)
+                            VALUES(${this.group_name});`
+        db.run(addNewPerson, function(err) {
+            if(err) {
+                callback(err)
+            } else {
+                callback(null)
+            }
+        })
+    }
+
+    static deleted(id, callback) {
+        let deleteUser = `DELETE FROM Employees
+                          WHERE id = ${id}`
+        db.run(deleteUser, function(err, deleted) {
+            if(err) {
+                callback(err, null)
+            } else {
+                callback(null, deleted)
+            }
+        })
+    }
+
+    update() {
+
     }
 }
 
