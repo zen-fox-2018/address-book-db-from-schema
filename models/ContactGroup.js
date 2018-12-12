@@ -7,14 +7,18 @@ class ContactGroup {
         this.groupId = groupId
     }
 
-    static findOne(input, cb) {
-        let query = `SELECT * FROM ContactGroups WHERE id = ${input}`
-        db.get(query, function(err, data) {
+    static findById(input, cb) {
+        let query = 
+        `SELECT * FROM ContactGroups
+        WHERE groupId = ?`
+
+        db.all(query, [input.id], function(err, row) {
             if(err) {
-                cb('Error findOne ContactGroups => ', err, null)
+                cb(err, null)
             } else {
-                let contactGroup = new ContactGroup(null, data.contactId, data.groupId)
-                cb(null, contactGroup)
+                // console.log(row, '------ row')
+                // let contactGroup = new ContactGroup(null, row.contactId, row.groupId)
+                cb(null, row)
             }
         })
     }
@@ -81,8 +85,8 @@ class ContactGroup {
         })
     }
 
-    delete(input, cb) {
-        let query = `DELETE FROM ContactGroups WHERE id = ${input}`
+    static delete(input, cb) {
+        let query = `DELETE FROM ContactGroups WHERE groupid = ${input.groupId}`
 
         db.run(query, function(err) {
             if(err) {

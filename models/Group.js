@@ -6,12 +6,13 @@ class Group {
         this.name = group_name
     }
 
-    static findOne(input, cb) {
-        let query = `SELECT * FROM Groups WHERE id = ${input.id}`
+    static findById(input, cb) {
+        let query =
+        `SELECT * FROM Groups WHERE id = ?`
 
-        db.get(query, function(err, row) {
+        db.get(query, [input.id], function(err, row) {
             if(err) {
-                cb('Error findOne Group => ', err, null)
+                cb('Error findById Group => ', err, null)
             } else {
                 let group = new Group(row.id, row.group_name)
                 cb(null, group)

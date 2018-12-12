@@ -1,5 +1,6 @@
 const Group = require('../models/Group')
 const View = require('../view/View')
+const ContactGroup = require('../models/ContactGroup')
 
 class Controller {
     static register(input) {
@@ -30,17 +31,32 @@ class Controller {
     }
 
     static delete(input) {
-        Group.findOne(input, function(err, groupData) {
+        ContactGroup.findById(input, function(err, dataCG) {
             if(err) {
-                View.displayError('Err : ', err)
+                View.displayError('Err :', err)
             } else {
-                groupData.delete(input, function(err) {
-                    if(err) {
-                        View.displayError('Err : ', err)
-                    } else {
-                        View.displaySuccess('Success Delete Group')
-                    }
-                })
+                for(let i = 0; i < dataCG.length; i++) {
+                    ContactGroup.delete(dataCG[i], function(err) {
+                        if(err) {
+                            View.displayError(err)
+                        } else {
+                            Group.findById(input, function(err, dataGroup) {
+                                if(err) {
+                                    View.displayError('Err :, ', err)
+                                } else {
+                                    console.log(dataGroup)
+                                    dataGroup.delete(dataGroup, function(err) {
+                                        if(err) {
+                                            View.displayError('Err : ', err)
+                                        } else {
+                                            View.displaySuccess('Delete Group Success')
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
             }
         })
     }
