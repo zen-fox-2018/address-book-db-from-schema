@@ -1,5 +1,5 @@
 const ContactController = require('./Controllers/ContactController')
-
+const GroupController = require('./Controllers/GroupController')
 const argv = process.argv.slice(2)
 let command = argv[0]
 let todo = argv[1]
@@ -16,13 +16,22 @@ switch (command) {
             ContactController.addContact(input)
         } else if (todo === "delete") {
             ContactController.delete(input)
-            break;
         } else if (todo === "update") {
             ContactController.update(input)
-            break;
         }
         break;
-
+    case "group":
+        if (todo === "showall") {
+            GroupController.showall()
+        } else if (todo === "findById") {
+            GroupController.findById(input)
+        } else if (todo === "create") {
+            GroupController.createGroup(input)
+        } else if (todo === "delete") {
+            GroupController.delete(input)
+        } else if (todo === "update") {
+            GroupController.update(input)
+        }
     default:
         break;
 }

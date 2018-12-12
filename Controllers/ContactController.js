@@ -1,9 +1,8 @@
 const Contact = require('../Models/contact')
+const GroupContact = require('../Models/contact-group')
 const View = require('../Views/view')
 
 class ContactControllers {
-
-
 
     static showall() {
         Contact.findAll(function (err, data) {
@@ -68,7 +67,6 @@ class ContactControllers {
             field: "email",
             value: input[0]
         }
-        console.log(search)
         Contact.findOne(search, function(err, row) {
             if (err) {
                 View.displayErr(err)
@@ -101,6 +99,25 @@ class ContactControllers {
                 }
             }
         })
+    }
+
+    static addGrroup(input) {
+        let caricontact = {
+            field: "email",
+            value: input[0]
+        }
+     Contact.findOne(caricontact,function(err,dataContact) {
+        if (err) {
+            View.displayErr(err)
+
+        } else {
+            if (dataContact.id === undefined) {
+                View.displayErr('email belum terdaftar')
+            } else {
+                let contact = dataContact
+            }
+        }
+     })
     }
 
 
