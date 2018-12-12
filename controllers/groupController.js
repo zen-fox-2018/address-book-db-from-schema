@@ -1,6 +1,7 @@
 const Group = require('../models/Group') 
 const View = require('../views/View')
 const ContactGroup = require('../models/ContactGroup') 
+const Contact = require('../models/Contact')
 
 class GroupController {
   static execute(input) {
@@ -14,6 +15,8 @@ class GroupController {
       case 'show': GroupController.show()
         break;
       case 'delete': GroupController.delete(option)
+        break;
+      case 'invite': GroupController.invite(option)
         break;
       default: View.disErr(`no such command!`)
         break;
@@ -110,6 +113,33 @@ class GroupController {
         View.display(`showing data\n`, rows)
       }
     })
+  }
+
+  static invite(input) {
+    let groupid = input[0]
+    let email = input[1]
+
+    Group.findOne({where:'id', value: groupid}, (err, rowGroup) => {
+      if(err) {
+        View.disErr(err)
+      } else {
+        Contact.findOne({where: 'email',value: email}, (err,rowContact) => {
+          if(err) {
+            View.disErr(err)
+          } else {
+            let newContactGroup = new ContactGroup({contactId: rowContact.id, groupId: rowGroup.id}) 
+            newContactGroup.save((err ,dataThis) => {
+              if(err) {
+                View.disErr(err)
+              } else {
+                View.display(`invite ${rowContact.name} to ${rowGroup.name}`)
+              }
+            })
+          }
+        })
+      }
+    })
+
   }
 }
 module.exports = GroupController
