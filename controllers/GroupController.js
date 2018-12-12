@@ -42,7 +42,7 @@ class GroupController {
     
     static delete(name) {
         let find = {
-            name: name
+            name: name.join(' ')
         }
         Group.findOne(find, (err, group) => {
             if (err) {

@@ -46,8 +46,16 @@ class Group {
         let query = `
         DELETE FROM Groups
         WHERE ${field} = ?`
-        db.run(query, input, (err) => {
-            err? cb({msg: 'err delete Groups', err: err}): cb(null)
+        db.serialize(() => {
+            db.run('PRAGMA foreign_keys = ON', (err) => {
+                if (err) {
+                    cb({msg: 'err pragma group', err: err})
+                } else {
+                    db.run(query, input, (err) => {
+                        err? cb({msg: 'err delete Groups', err: err}): cb(null)
+                    })
+                }
+            })
         })
     }
 

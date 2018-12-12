@@ -42,7 +42,7 @@ class ContactController {
     
     static delete(email) {
         let find = {
-            email: email
+            email: email.join(' ')
         }
         Contact.findOne(find, (err, contact) => {
             if (err) {

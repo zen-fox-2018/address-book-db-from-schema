@@ -46,8 +46,16 @@ class Contact {
         let query = `
         DELETE FROM Contacts
         WHERE ${field} = ?`
-        db.run(query, input, (err) => {
-            err? cb({msg: 'err delete Contacts', err: err}): cb(null)
+        db.serialize(() => {
+            db.run('PRAGMA foreign_keys = ON', (err) => {
+                if (err) {
+                    cb({msg: 'err pragma contact', err: err})
+                } else {
+                    db.run(query, input, (err) => {
+                        err? cb({msg: 'err delete Contacts', err: err}): cb(null)
+                    })
+                }
+            })
         })
     }
 
