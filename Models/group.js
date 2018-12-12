@@ -34,16 +34,15 @@ class Groups {
                 for(let i = 0; i < arr.length; i++) {
                     let newData = new Groups(arr[i].id, arr[i].group_name);
                     result.push(newData);
-
-                    callback(null, result);
                 }
+                callback(null, result);
             }
         })
     }
 
     create(callback) {
-        let addNewPerson = `INSERT INTO Groups(name)
-                            VALUES(${this.group_name});`
+        let addNewPerson = `INSERT INTO Groups(group_name)
+                            VALUES("${this.group_name}");`
         db.run(addNewPerson, function(err) {
             if(err) {
                 callback(err)
@@ -54,19 +53,29 @@ class Groups {
     }
 
     static deleted(id, callback) {
-        let deleteUser = `DELETE FROM Employees
+        let deleteUser = `DELETE FROM Groups
                           WHERE id = ${id}`
-        db.run(deleteUser, function(err, deleted) {
+        db.run(deleteUser, function(err) {
             if(err) {
-                callback(err, null)
+                callback(err)
             } else {
-                callback(null, deleted)
+                callback(null)
             }
         })
     }
 
-    update() {
 
+    update(column, value, id, callback) {
+        let query = `UPDATE Groups
+                     SET ${column} = "${value}"
+                     WHERE id = ${id};`
+        db.run(query, function(err) {
+            if(err) {
+                callback(err)
+            } else {
+                callback(null)
+            }
+        })
     }
 }
 

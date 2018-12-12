@@ -24,6 +24,10 @@ class Views {
     static showCreatedGroups(data) {
         console.log(data)
     }
+
+    static showCreatedContactsGroups(data) {
+        console.log(data)
+    }
 }
 
 module.exports = Views

@@ -12,7 +12,7 @@ class Contacts {
 
     static findOne(field, value, callback) {
         let oneContacts = `SELECT * FROM Contacts
-                           WHERE ${field} = ${value}`
+                           WHERE ${field} = "${value}"`
         db.get(oneContacts, function(err, rows) {
             if(err) {
                 callback(err, null)
@@ -49,7 +49,7 @@ class Contacts {
 
     create(callback) {
         let addNewPerson = `INSERT INTO Contacts(name, company, phone_number, email)
-                            VALUES(${this.name}, ${this.company}, ${this.phone_number}, ${this.email});`
+                            VALUES("${this.name}", "${this.company}", "${this.phone_number}", "${this.email}");`
         db.run(addNewPerson, function(err) {
             if(err) {
                 callback(err)
@@ -73,7 +73,7 @@ class Contacts {
     }
 
     static delete(id, callback) {
-        let deleteUser = `DELETE FROM Employees
+        let deleteUser = `DELETE FROM Contacts
                           WHERE id = ${id}`
         db.run(deleteUser, function(err, deleted) {
             if(err) {
@@ -83,7 +83,6 @@ class Contacts {
             }
         })
     }
-
 }
 
 module.exports = Contacts

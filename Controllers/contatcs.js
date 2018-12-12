@@ -1,6 +1,6 @@
 
 const Contacts = require("../Models/contact");
-const Views = require("../Views/view")
+const Views = require("../Views/view");
 
 class ContactsController {
 
@@ -12,8 +12,8 @@ class ContactsController {
                 if(data) {
                     Views.showError("Sorry this email has been taken!")
                 } else {
-                    let newContact = new Contacts(name, company, phone_number, email)
-                    newContact.create(newContact, function(err) {
+                    let newContact = new Contacts(null, name, company, phone_number, email)
+                    newContact.create(function(err) {
                         if(err) {
                             Views.showError(err)
                         } else {
@@ -49,15 +49,14 @@ class ContactsController {
                 })
             }
         })
-
     }
 
     static delete(id) {
-        Contacts.delete(id, function(err, deletedData) {
+        Contacts.delete(id, function(err) {
             if(err) {
                 Views.showError(err)
             } else {
-                Views.showDeleted(deletedData)
+                Views.showDeleted("You have successfully deleted this person from your contacts!")
             }
         })
     }
