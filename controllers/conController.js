@@ -115,7 +115,7 @@ class ContactController {
   }
 
   static show(){
-    Contact.findAll((err, rows) => {
+    Contact.findAllConGroup((err, rows) => {
       if(err) {
         View.disErr(err)
       } else {
@@ -125,7 +125,7 @@ class ContactController {
   }
 
   static find(input) {
-    Contact.findOne({where: input[0],value: input[1]}, (err, row) => {
+    Contact.findConGroup({where: input[0],value: input[1]}, (err, row) => {
       if(err) {
         View.disErr(err)
       } else {

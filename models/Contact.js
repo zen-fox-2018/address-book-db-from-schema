@@ -35,6 +35,24 @@ class Contact {
 
   static findOne(obj, cb) {
     let query = `
+      SELECT * FROM contacts WHERE ${obj.where} = ?
+    `
+    db.get(query, [obj.value] , (err, row) => {
+      if(err) {
+        cb(err)
+      } else {
+        if(row) {
+          let newCon = new Contact(row)
+          cb(null , newCon)
+        } else {
+          cb(null, null)
+        }
+      }
+    })
+  }
+  
+  static findConGroup(obj, cb) {
+    let query = `
       SELECT * FROM (SELECT contacts.id,contacts.name, company, phone, email, group_concat(groups.name) As groupsName FROM contacts 
       left Join contactgroups on contacts.id = contactgroups.contactId 
       left join groups on contactgroups.groupId = groups.id
@@ -55,8 +73,26 @@ class Contact {
       }
     })
   }
-  
+
   static findAll(cb) {
+    let query = `
+    SELECT * From contacts`
+
+    db.all(query, (err, rows) => {
+      if(err) {
+        cb(err)
+      } else {
+        let temp = []
+        for (let i = 0; i < rows.length; i++) {
+          let newContact = new Contact(rows[i])
+          temp.push(newContact)
+        }
+        cb(null , temp)
+      }
+    })
+  }
+
+  static findAllConGroup(cb) {
     let query = `
     SELECT contacts.id,contacts.name, company, phone, email, group_concat(groups.name) As groupsName FROM contacts 
     left Join contactgroups on contacts.id = contactgroups.contactId 
