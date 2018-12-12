@@ -49,6 +49,8 @@ switch (command) {
     case 'show': 
         if (argv[1] === 'contact') {
             ContactController.show(argv[2])
+        } else if (argv[1] === 'group') {
+            GroupController.show(argv[2])
         }
         break;
     default:

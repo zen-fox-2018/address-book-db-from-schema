@@ -51,6 +51,19 @@ class Group {
         })
     }
 
+    static show(obj, cb) {
+        let field = Object.keys(obj)
+        let input = Object.values(obj)
+        let query = `
+        SELECT Contacts.name AS "contact", Groups.*
+        FROM Contacts_Groups
+        JOIN Contacts ON Contacts_Groups.ContactId = Contacts.id
+        JOIN Groups ON Contacts_Groups.GroupId = Groups.id
+        WHERE Groups.${field} = ?`
+        db.all(query, input, (err, data) => {
+            err? cb({msg: 'err showGroup', err: err}): cb(null, data)
+        })
+    }
 }
 
 module.exports = Group

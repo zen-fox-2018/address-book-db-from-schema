@@ -71,6 +71,25 @@ class GroupController {
         })
     }
 
+    static show(name) {
+        let find = {
+            name: name
+        }
+        Group.show(find, (err, data) => {
+            if (err) {
+                View.disErr(err)
+            } else {
+                let obj = {
+                    name: data[0].name,
+                    contacts: []
+                }
+                data.forEach(e => {
+                    obj.contacts.push(e.contact)
+                });
+                View.showContact(obj)
+            }
+        })
+    }
 }
 
 module.exports = GroupController
