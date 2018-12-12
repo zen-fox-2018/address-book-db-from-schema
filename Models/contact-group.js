@@ -2,21 +2,31 @@
 const db = require('../db')
 
 class ContactGroup {
-    constructor(Object) {
+    constructor(object) {
         this._id = object.id;
-        this._contactId = obejct.contactId;
+        this._contactId = object.contactId;
         this._groupId = object.groupId;
-
     }
 
-    create () {
+
+    static execute(query,input, callback) {
+        db.run(query, input, function (err) {
+            if (err) {
+                callback(err)
+            } else {
+                callback(null, this)
+            }
+        })
+    }
+
+    create (callback) {
         let query = `
-            INSERT INTO ContactGroups (group_name)
-            VALUES (?)`
+            INSERT INTO ContactGroups (contactId, groupId)
+            VALUES (?,?)`
             let input = Object.values(this).filter(element => element !== undefined)
             console.log(input)
     
-           Group.execute(query, input, function (err,data) {
+           ContactGroup.execute(query, input, function (err,data) {
                 if (err) {
                     callback(err)
                 } else {
@@ -29,7 +39,7 @@ class ContactGroup {
     delete (field, callback) {
         let query = `DELETE FROM ContactGroups WHERE ${field} = ?`
         let input = [this[field]]
-        Contact.execute(query,input, function (err, data){
+        ContactGroup.execute(query,input, function (err, data){
             if (err) {
                 callback(err)
             } else {

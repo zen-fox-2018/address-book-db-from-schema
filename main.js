@@ -1,5 +1,6 @@
 const ContactController = require('./Controllers/ContactController')
 const GroupController = require('./Controllers/GroupController')
+const HelpController = require('./Controllers/HelpController')
 const argv = process.argv.slice(2)
 let command = argv[0]
 let todo = argv[1]
@@ -31,7 +32,9 @@ switch (command) {
             GroupController.delete(input)
         } else if (todo === "update") {
             GroupController.update(input)
+        } else if (todo === "addcontact") {
+            GroupController.addContact(input)
         }
-    default:
+    // default: HelpController.help()
         break;
 }

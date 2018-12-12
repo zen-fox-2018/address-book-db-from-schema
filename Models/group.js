@@ -31,9 +31,9 @@ class Group {
     static findOne (object, callback) {
         let query = `SELECT * FROM (SELECT Groups.id , groups.group_name , group_concat(Contacts.name) AS contacts
         FROM Groups 
-        JOIN ContactGroups
+        LEFT JOIN ContactGroups
          On Groups.id = ContactGroups.groupId 
-         JOIN Contacts
+        LEFT JOIN Contacts
           ON ContactGroups.contactId = Contacts.id
         GROUP BY Groups.group_name)
         WHERE ${object.field} = ?`
@@ -61,9 +61,9 @@ class Group {
         let query = `
         SELECT Groups.id , groups.group_name , group_concat(Contacts.name) AS contacts
         FROM Groups 
-        JOIN ContactGroups 
+        LEFT JOIN ContactGroups 
             On Groups.id = ContactGroups.groupId 
-        JOIN Contacts 
+        LEFT JOIN Contacts 
             ON ContactGroups.contactId = Contacts.id
         GROUP BY Groups.group_name`
         db.all(query, function (err, rows) {

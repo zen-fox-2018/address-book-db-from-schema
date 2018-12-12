@@ -101,24 +101,7 @@ class ContactControllers {
         })
     }
 
-    static addGrroup(input) {
-        let caricontact = {
-            field: "email",
-            value: input[0]
-        }
-     Contact.findOne(caricontact,function(err,dataContact) {
-        if (err) {
-            View.displayErr(err)
-
-        } else {
-            if (dataContact.id === undefined) {
-                View.displayErr('email belum terdaftar')
-            } else {
-                let contact = dataContact
-            }
-        }
-     })
-    }
+    
 
 
 }
