@@ -1,4 +1,5 @@
 const db = require('../db/connection')
+const GroupContact = require('../models/groupContact');
 class Group {
   constructor(obj) {
     this.id = obj.id;
@@ -97,20 +98,36 @@ class Group {
   }
 
   static deleteGroup(data, callback) {
-    let email = data[0];
-    const query = `
+    let name = data[0];
+    const qGroup = `
       DELETE
       FROM groups
       WHERE
-        email = "${email}";
+        name = "${name}";
     `;
-
-    db.run(query, function (err) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, this);
-      }
+    db.serialize((err) => {
+      Group.findByOne(["name", name], (errFind, groups) => {
+        if (errFind) {
+          callback(errFind);
+        } else {
+          if (groups.length) {
+            GroupContact.deleteGroupContact(["groupId", groups[0].id], (errGC) => {
+              if (errGC) {
+                callback(errGC);
+              }
+            })
+            db.run(qGroup , function (err) {
+              if (err) {
+                callback(err);
+              } else {
+                callback(null);
+              }
+            })
+          } else {
+            callback('Nama grup Tidak ditemukan');
+          }
+        }
+      })
     })
   }
 
@@ -130,3 +147,5 @@ class Group {
     })
   }
 }
+
+module.exports = Group;

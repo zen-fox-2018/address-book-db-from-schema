@@ -1,5 +1,5 @@
 const ContactController = require('./controllers/contact');
-// const PatientController = require('./controllers/patient.js');
+const GroupController = require('./controllers/group');
 
 class Contact {
   constructor(command) {
@@ -17,9 +17,25 @@ class Contact {
       case 'deleteContact':
         ContactController.deleteContact(this.command.slice(1));
         break;
+      case 'joinContact':
+        ContactController.joinContact(this.command.slice(1));
+        break;
+      case 'showContact':
+        ContactController.showContact(this.command.slice(1));
+        break;
+
+      case 'listGroup':
+        GroupController.listGroup();
+        break;
+      case 'addGroup':
+        GroupController.addGroup(this.command.slice(1));
+        break;
+      case 'deleteGroup':
+        GroupController.deleteGroup(this.command.slice(1));
+        break;
 
       default:
-        ContactController.showErr(`Masukkan sintax yang benar.`);
+        ContactView.showErr(`Masukkan sintax yang benar.`);
     }
   }
 }

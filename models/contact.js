@@ -1,5 +1,6 @@
 const db = require('../db/connection');
 const GroupContact = require('../models/groupContact');
+const Group = require('../models/group');
 class Contact {
   constructor(obj) {
     this.id = obj.id;
@@ -133,9 +134,72 @@ class Contact {
             callback('Email Tidak ditemukan');
           }
         }
+      })
     })
-  })
-}
+  }
+
+  static assignContact (data, callback) {
+    let email = data[0];
+    let groupName = data[1];
+    Contact.findByOne(['email', email], (errContact, contacts) => {
+      if (errContact) {
+        callback(errContact)
+      } else {
+        if (contacts.length) {
+          Group.findByOne(['name', groupName], (errGroup, groups) => {
+            if (errGroup) {
+              callback(errGroup);
+            } else {
+              if (groups.length) {
+                GroupContact.addGroupContact([contacts[0].id, groups[0].id], (errAdd) => {
+                  if (errAdd) {
+                    callback(errAdd);
+                  } else {
+                    callback();
+                  }
+                })
+              } else {
+                callback(`Wrong group name!`)
+              }
+            }
+          })
+        } else {
+          callback(`Wrong email!`);
+        }
+      }
+    })
+  }
+
+  static showContact(data, callback) {
+    let email = data[0];
+    Contact.findByOne(['email', email], (errContact, contacts) => {
+      if (errContact) {
+        callback(errContact, null)
+      } else {
+        if (contacts.length) {
+          GroupContact.showGroup (contacts[0].id, (errGroup, groups) => {
+            if (errGroup) {
+              callback(errGroup, null)
+            } else {
+              let objContact = {
+                name : contacts[0].name,
+                company : contacts[0].company,
+                phoneNumber : contacts[0].phoneNumber,
+                email : contacts[0].email,
+                groups : []
+              }
+              groups.forEach( g => {
+                objContact.groups.push(g.groupName);
+              })
+              callback(null, objContact)
+            }
+          })
+        } else {
+          callback(`Wrong email!`, null);
+        }
+      }
+    })
+  }
 
   save(callback) {
     const query = `

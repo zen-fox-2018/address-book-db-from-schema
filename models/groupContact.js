@@ -41,32 +41,22 @@ class GroupContact {
     });
   }
 
-  static findByOne(data, callback) {
-    let whereValue = '';
-    for (let i = 0; i < data.length - 1; i+=2) {
-      whereValue += `${data[i]} = "${data[i+1]}"`;
-      if (i < data.length - 2) {
-        whereValue += ' AND '
-      }
-    }
+  static showGroup(data, callback) {
     const query = `
       SELECT
-        *
+        groups.name as groupName
       FROM
-        groupContacts
+        groups, groupContacts
       WHERE
-        ${whereValue}
+        groups.id = groupContacts.groupId AND
+        groupContacts.contactId = ${data};
     `;
 
-    db.all(query, (err, groupContacts) => {
+    db.all(query, (err, groups) => {
       if (err) {
         callback(err, null);
       } else {
-        let dataGroupContacts = [];
-        groupContacts.forEach( c => {
-          dataGroupContacts.push(new GroupContact(c));
-        })
-        callback(null, dataGroupContacts);
+        callback(null, groups);
       }
     })
   }

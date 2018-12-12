@@ -41,6 +41,26 @@ class ContactController {
       }
     })
   }
+
+  static joinContact(data) {
+    Contact.assignContact(data, (err) => {
+      if (err) {
+        ContactView.showErr(err);
+      } else {
+        ContactView.showSuccess(`Contact Joined`);
+      }
+    })
+  }
+
+  static showContact(email) {
+    Contact.showContact(email , (err,data) =>{
+      if (err) {
+        ContactView.showErr(err);
+      } else {
+        ContactView.showData(data);
+      }
+    })
+  }
 }
 
 module.exports = ContactController;
